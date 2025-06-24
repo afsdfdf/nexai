@@ -1,7 +1,10 @@
 "use client"
 
 import type React from "react"
+import { useState, useEffect } from "react"
+import Link from "next/link"
 
+import PageLayout from "@/components/page-layout"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -25,8 +28,6 @@ import {
   Award,
 } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
-import { useState, useEffect } from "react"
 import {
   Dialog,
   DialogTrigger,
@@ -107,73 +108,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white overflow-x-hidden">
-      {/* Enhanced Navigation with new logo */}
-      <nav className="fixed top-0 w-full z-50 bg-gradient-to-r from-slate-950/90 via-slate-900/90 to-slate-950/90 backdrop-blur-2xl border-b border-blue-500/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex justify-between items-center h-14 sm:h-16">
-            <div className="flex items-center space-x-3">
-              <div className="relative w-8 h-8 sm:w-10 sm:h-10">
-                <Image
-                  src="/images/nexai-logo.png"
-                  alt="NexAI Logo"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-contain"
-                  priority
-                />
-              </div>
-              <span className="text-lg sm:text-xl font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                NexAI
-              </span>
-            </div>
-            <div className="hidden lg:flex items-center space-x-8">
-              <a
-                href="#overview"
-                className="text-gray-300 hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 text-sm font-medium"
-              >
-                Overview
-              </a>
-              <a
-                href="#features"
-                className="text-gray-300 hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 text-sm font-medium"
-              >
-                Features
-              </a>
-              <a
-                href="#team"
-                className="text-gray-300 hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 text-sm font-medium"
-              >
-                Team
-              </a>
-              <a
-                href="#security"
-                className="text-gray-300 hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 text-sm font-medium"
-              >
-                Security
-              </a>
-              <a
-                href="#pricing"
-                className="text-gray-300 hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 text-sm font-medium"
-              >
-                Pricing
-              </a>
-              <Button className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-medium px-6 py-2 rounded-full transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-purple-500/25">
-                Buy
-              </Button>
-            </div>
-            {/* Mobile menu button */}
-            <div className="lg:hidden">
-              <Button
-                size="sm"
-                className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-medium px-4 py-2 rounded-full transition-all duration-300 shadow-lg shadow-blue-500/25 text-xs"
-              >
-                Buy
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <PageLayout>
 
       {/* Hero Section - Enhanced with mobile optimization */}
       <SmoothScrollSection className="min-h-screen flex items-center justify-center pt-16 relative">
@@ -1525,107 +1460,7 @@ export default function HomePage() {
         </div>
       </SmoothScrollSection>
 
-      {/* Simplified Footer with new logo */}
-      <footer className="bg-gradient-to-br from-slate-950 via-slate-900 to-black border-t border-blue-500/20 py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          {/* Header section with new logo */}
-          <div className="text-center mb-8 sm:mb-12">
-            <div className="flex items-center justify-center space-x-3 mb-4">
-              <div className="relative w-10 h-10">
-                <Image
-                  src="/images/nexai-logo.png"
-                  alt="NexAI Logo"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <span className="text-xl font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                NexAI
-              </span>
-            </div>
-            <p className="text-gray-400 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-              Revolutionizing mobile technology with AI-powered cryptocurrency mining and Web3 integration.
-            </p>
-          </div>
 
-          {/* Simplified links grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 mb-8 sm:mb-12">
-            <div>
-              <h3 className="text-white font-medium mb-3 sm:mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent text-sm sm:text-base">
-                Products
-              </h3>
-              <div className="space-y-2 text-xs sm:text-sm text-gray-400">
-                <div className="hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  NexAI Phone
-                </div>
-                <div className="hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  NexAI Phone Pro
-                </div>
-                <div className="hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  Accessories
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-white font-medium mb-3 sm:mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent text-sm sm:text-base">
-                Services
-              </h3>
-              <div className="space-y-2 text-xs sm:text-sm text-gray-400">
-                <div className="hover:bg-gradient-to-r hover:from-purple-400 hover:to-pink-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  Mining
-                </div>
-                <div className="hover:bg-gradient-to-r hover:from-purple-400 hover:to-pink-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  DeFi
-                </div>
-                <div className="hover:bg-gradient-to-r hover:from-purple-400 hover:to-pink-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  Web3 Wallet
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-white font-medium mb-3 sm:mb-4 bg-gradient-to-r from-pink-400 to-red-400 bg-clip-text text-transparent text-sm sm:text-base">
-                Company
-              </h3>
-              <div className="space-y-2 text-xs sm:text-sm text-gray-400">
-                <div className="hover:bg-gradient-to-r hover:from-pink-400 hover:to-red-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  About
-                </div>
-                <div className="hover:bg-gradient-to-r hover:from-pink-400 hover:to-red-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  Careers
-                </div>
-                <div className="hover:bg-gradient-to-r hover:from-pink-400 hover:to-red-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  Press
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-white font-medium mb-3 sm:mb-4 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent text-sm sm:text-base">
-                Support
-              </h3>
-              <div className="space-y-2 text-xs sm:text-sm text-gray-400">
-                <div className="hover:bg-gradient-to-r hover:from-green-400 hover:to-emerald-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  Contact
-                </div>
-                <div className="hover:bg-gradient-to-r hover:from-green-400 hover:to-emerald-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  Docs
-                </div>
-                <div className="hover:bg-gradient-to-r hover:from-green-400 hover:to-emerald-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 cursor-pointer">
-                  Community
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Copyright */}
-          <div className="border-t border-blue-500/20 pt-6 sm:pt-8 text-center">
-            <p className="text-gray-400 text-xs sm:text-sm">© 2025 NexAI Inc. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
 
       {/* 全局预定Dialog弹窗 */}
       <Dialog open={orderOpen} onOpenChange={setOrderOpen}>
@@ -1671,6 +1506,6 @@ export default function HomePage() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </PageLayout>
   )
 }
