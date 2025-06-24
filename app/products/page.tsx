@@ -138,12 +138,13 @@ export default function ProductsPage() {
       <section className="py-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {phones.map((phone) => (
+            {phones.map((phone, index) => (
               <Card 
                 key={phone.id}
-                className={`relative overflow-hidden bg-gradient-to-br ${phone.gradient} backdrop-blur-2xl border-0 shadow-2xl hover:scale-105 transition-all duration-500 ${
-                  phone.popular ? 'ring-2 ring-purple-500/50' : ''
+                className={`relative overflow-hidden bg-gradient-to-br ${phone.gradient} backdrop-blur-2xl border-0 shadow-2xl hover:scale-105 hover:rotate-1 hover:-translate-y-2 transition-all duration-700 transform-gpu group ${
+                  phone.popular ? 'ring-2 ring-purple-500/50 scale-105' : ''
                 }`}
+                style={{ animationDelay: `${index * 200}ms` }}
               >
                 {phone.popular && (
                   <div className="absolute top-4 left-4 z-10">
@@ -155,13 +156,15 @@ export default function ProductsPage() {
                 )}
                 
                 <CardHeader className="text-center pb-4">
-                  <div className="relative w-48 h-48 mx-auto mb-4">
+                  <div className="relative w-48 h-48 mx-auto mb-4 group-hover:scale-110 transition-transform duration-500">
                     <Image
                       src={phone.image}
                       alt={phone.name}
                       fill
-                      className="object-contain"
+                      className="object-contain group-hover:rotate-6 transition-transform duration-700"
                     />
+                    {/* Floating glow effect */}
+                    <div className={`absolute inset-0 bg-gradient-to-r ${phone.borderGradient} opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-500 -z-10`}></div>
                   </div>
                   <CardTitle className="text-2xl font-bold text-white mb-2">
                     {phone.name}

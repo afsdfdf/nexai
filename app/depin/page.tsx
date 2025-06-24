@@ -238,10 +238,14 @@ export default function DePINPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {networks.map((network, index) => (
-              <Card key={index} className="bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-900/50 backdrop-blur-2xl border border-blue-500/20 hover:scale-105 transition-all duration-500">
+              <Card 
+                key={index} 
+                className="bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-900/50 backdrop-blur-2xl border border-blue-500/20 hover:scale-105 hover:-translate-y-2 hover:rotate-1 transition-all duration-700 transform-gpu group animate-in fade-in-0 slide-in-from-bottom-4"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
                 <CardHeader className="text-center pb-4">
-                  <div className={`w-16 h-16 bg-gradient-to-r ${network.color} rounded-full flex items-center justify-center mx-auto mb-4`}>
-                    <network.icon className="w-8 h-8 text-white" />
+                  <div className={`w-16 h-16 bg-gradient-to-r ${network.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-2xl`}>
+                    <network.icon className="w-8 h-8 text-white group-hover:scale-125 transition-transform duration-300" />
                   </div>
                   <CardTitle className="text-lg text-white">{network.name}</CardTitle>
                   <CardDescription className="text-gray-400">{network.description}</CardDescription>

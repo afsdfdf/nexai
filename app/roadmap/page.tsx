@@ -153,9 +153,13 @@ export default function RoadmapPage() {
             
             <div className="space-y-16">
               {milestones.map((milestone, index) => (
-                <div key={index} className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
+                <div 
+                  key={index} 
+                  className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} animate-in fade-in-0 slide-in-from-bottom-6`}
+                  style={{ animationDelay: `${index * 300}ms` }}
+                >
                   <div className={`w-1/2 ${index % 2 === 0 ? 'pr-12 text-right' : 'pl-12 text-left'}`}>
-                    <Card className="bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-900/50 backdrop-blur-2xl border border-blue-500/20">
+                    <Card className="bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-900/50 backdrop-blur-2xl border border-blue-500/20 hover:scale-105 hover:-translate-y-2 hover:border-purple-500/30 transition-all duration-500 group">
                       <CardHeader>
                         <div className={`flex items-center gap-3 ${index % 2 === 0 ? 'flex-row-reverse' : 'flex-row'}`}>
                           <Badge className={`bg-gradient-to-r ${getStatusColor(milestone.status)} text-white`}>
@@ -185,12 +189,21 @@ export default function RoadmapPage() {
                   
                   {/* Timeline dot */}
                   <div className="relative z-10 flex items-center justify-center">
-                    <div className={`w-12 h-12 bg-gradient-to-r ${getStatusColor(milestone.status)} rounded-full border-4 border-slate-900 flex items-center justify-center`}>
+                    <div className={`w-12 h-12 bg-gradient-to-r ${getStatusColor(milestone.status)} rounded-full border-4 border-slate-900 flex items-center justify-center hover:scale-125 transition-transform duration-300 ${
+                      milestone.status === 'active' ? 'animate-pulse' : ''
+                    }`}>
                       {(() => {
                         const StatusIcon = getStatusIcon(milestone.status)
                         return <StatusIcon className="w-6 h-6 text-white" />
                       })()}
                     </div>
+                    {/* Pulsing rings for active status */}
+                    {milestone.status === 'active' && (
+                      <>
+                        <div className={`absolute w-16 h-16 bg-gradient-to-r ${getStatusColor(milestone.status)} opacity-20 rounded-full animate-ping`}></div>
+                        <div className={`absolute w-20 h-20 bg-gradient-to-r ${getStatusColor(milestone.status)} opacity-10 rounded-full animate-ping`} style={{ animationDelay: '0.5s' }}></div>
+                      </>
+                    )}
                   </div>
                   
                   <div className="w-1/2"></div>
