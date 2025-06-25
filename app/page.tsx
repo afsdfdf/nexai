@@ -36,6 +36,48 @@ const SmoothScrollSection = ({ children, className = "", id }: { children: React
   return <section id={id} className={`relative overflow-hidden ${className}`}>{children}</section>
 }
 
+// Floating particles component to avoid hydration mismatch
+const FloatingParticles = () => {
+  const [particles, setParticles] = useState<Array<{
+    left: string;
+    top: string;
+    animationDelay: string;
+    animationDuration: string;
+  }>>([]);
+
+  useEffect(() => {
+    // Generate particles only on client side
+    const generatedParticles = Array.from({ length: 20 }, () => ({
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 3}s`,
+      animationDuration: `${2 + Math.random() * 2}s`
+    }));
+    setParticles(generatedParticles);
+  }, []);
+
+  if (particles.length === 0) {
+    return null; // Don't render anything on server side
+  }
+
+  return (
+    <div className="absolute inset-0">
+      {particles.map((particle, i) => (
+        <div
+          key={i}
+          className="absolute w-1 h-1 bg-blue-400/30 rounded-full animate-bounce"
+          style={{
+            left: particle.left,
+            top: particle.top,
+            animationDelay: particle.animationDelay,
+            animationDuration: particle.animationDuration
+          }}
+        ></div>
+      ))}
+    </div>
+  );
+};
+
 export default function HomePage() {
   const [scrollY, setScrollY] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
@@ -56,13 +98,13 @@ export default function HomePage() {
     },
     {
       name: "Render Network",
-      logo: "/images/partners/render.png",
+      logo: "/images/partners/the-graph.png", // Using existing the-graph.png as a temporary placeholder
       description: "Distributed GPU rendering network",
       website: "https://rendernetwork.com"
     },
     {
       name: "Akash Network",
-      logo: "/images/partners/akash.png",
+      logo: "/images/partners/akash-network.png", // Fixed path to match actual filename
       description: "Decentralized cloud computing marketplace",
       website: "https://akash.network"
     },
@@ -92,21 +134,8 @@ export default function HomePage() {
             <div className="w-full h-full opacity-40 bg-center bg-cover bg-no-repeat animate-pulse" 
                  style={{backgroundImage: "url('/images/hero-ai-background.jpg')"}}
             ></div>
-            {/* Floating particles effect */}
-            <div className="absolute inset-0">
-              {[...Array(20)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute w-1 h-1 bg-blue-400/30 rounded-full animate-bounce"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    animationDelay: `${Math.random() * 3}s`,
-                    animationDuration: `${2 + Math.random() * 2}s`
-                  }}
-                ></div>
-              ))}
-            </div>
+            {/* Floating particles effect - Fixed hydration issue */}
+            <FloatingParticles />
           </div>
         </div>
 
@@ -131,7 +160,7 @@ export default function HomePage() {
                   <br />
                   <GlitchText 
                     text="intelligent mobile" 
-                    className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent hover:scale-105 transition-transform duration-500 cursor-default animate-in slide-in-from-right-10 duration-1000 delay-300"
+                    className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent hover:scale-105 transition-transform cursor-default animate-in slide-in-from-right-10 duration-1000 delay-300"
                   />
                 </h1>
 
