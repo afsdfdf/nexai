@@ -72,13 +72,13 @@ export default function PageLayout({ children }: PageLayoutProps) {
               
               {/* Social Media Icons */}
               <div className="flex space-x-3">
-                <a href="https://t.me/nexaiphone" target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-blue-500/20 to-blue-600/20 p-2 rounded-full border border-blue-500/30 hover:border-blue-500/60 transition-all hover:scale-110">
-                  <svg className="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                <a href="https://t.me/nexaiphone" target="_blank" rel="noopener noreferrer" aria-label="Telegram 社区" title="Telegram 社区" className="bg-gradient-to-r from-blue-500/20 to-blue-600/20 p-2 rounded-full border border-blue-500/30 hover:border-blue-500/60 transition-all hover:scale-110">
+                  <svg className="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.214-.495.214l.18-2.5 4.563-4.125c.198-.175-.043-.271-.31-.097l-5.636 3.55-2.424-.746c-.517-.17-.53-.517.11-.764l9.472-3.654c.425-.163.81.102.67.652z" />
                   </svg>
                 </a>
-                <a href="https://twitter.com/nexaiphone" target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-blue-500/20 to-blue-600/20 p-2 rounded-full border border-blue-500/30 hover:border-blue-500/60 transition-all hover:scale-110">
-                  <svg className="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                <a href="https://twitter.com/nexaiphone" target="_blank" rel="noopener noreferrer" aria-label="推特 Twitter" title="推特 Twitter" className="bg-gradient-to-r from-blue-500/20 to-blue-600/20 p-2 rounded-full border border-blue-500/30 hover:border-blue-500/60 transition-all hover:scale-110">
+                  <svg className="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z" />
                   </svg>
                 </a>

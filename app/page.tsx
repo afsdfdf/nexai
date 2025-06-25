@@ -214,7 +214,7 @@ export default function HomePage() {
                     Explore Products
                 </Button>
                 </Link>
-                <Link href="/whitepaper">
+                <Link href="/whitepaper.html" target="_blank">
                 <Button
                   size="lg"
                   variant="outline"
@@ -602,7 +602,7 @@ export default function HomePage() {
                 Explore Products
             </Button>
             </Link>
-            <Link href="/whitepaper">
+            <Link href="/whitepaper.html" target="_blank">
             <Button
               size="lg"
               variant="outline"

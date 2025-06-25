@@ -21,7 +21,7 @@ export default function Navigation() {
     { name: 'NFT Collection', href: '/nft' },
     { name: 'Team', href: '/team' },
     { name: 'Roadmap', href: '/roadmap' },
-    { name: 'Whitepaper', href: '/whitepaper' },
+    { name: 'Whitepaper', href: '/whitepaper.html', target: '_blank' },
   ]
 
   const communityLinks = [
@@ -86,14 +86,15 @@ export default function Navigation() {
               <Link
                 key={item.name}
                 href={item.href}
+                target={item.target || undefined}
                 className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 group hover:scale-105 ${
-                  pathname === item.href
+                  pathname === item.href && !item.target
                     ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400 shadow-lg shadow-blue-500/20'
                     : 'text-gray-300 hover:bg-slate-800/50 hover:text-white'
                 }`}
               >
                   <span>{item.name}</span>
-                {pathname === item.href && (
+                {pathname === item.href && !item.target && (
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full animate-pulse"></div>
                 )}
               </Link>
@@ -149,8 +150,9 @@ export default function Navigation() {
                 <Link
                   key={item.name}
                   href={item.href}
+                  target={item.target || undefined}
                   className={`flex items-center space-x-3 px-4 py-3 text-sm font-medium transition-all duration-300 rounded-lg hover:scale-[1.02] ${
-                    pathname === item.href
+                    pathname === item.href && !item.target
                       ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-blue-400 shadow-lg shadow-blue-500/20'
                       : 'text-gray-300 hover:text-white hover:bg-slate-800/50'
                   }`}
@@ -158,7 +160,7 @@ export default function Navigation() {
                   onClick={() => setIsOpen(false)}
                 >
                   <span>{item.name}</span>
-                  {pathname === item.href && (
+                  {pathname === item.href && !item.target && (
                     <div className="ml-auto w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
                   )}
                 </Link>
