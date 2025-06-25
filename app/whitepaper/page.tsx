@@ -32,12 +32,18 @@ export default function WhitepaperPage() {
               </span>
             </Link>
             <div className="flex items-center space-x-4">
-              <Button
-                className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-medium px-6 py-2 rounded-full transition-all duration-300"
+              <a 
+                href="/whitepaper.html" 
+                target="_blank" 
+                rel="noopener noreferrer"
               >
-                <Download className="w-4 h-4 mr-2" />
-                Download PDF
-              </Button>
+                <Button
+                  className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-medium px-6 py-2 rounded-full transition-all duration-300"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  View Full Whitepaper
+                </Button>
+              </a>
             </div>
           </div>
         </div>
@@ -621,18 +627,30 @@ export default function WhitepaperPage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-medium px-8 py-4 rounded-full transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-purple-500/25 text-lg">
-              <Download className="w-5 h-5 mr-3" />
-              Download Full Whitepaper (PDF)
-            </Button>
-            
-            <Button
-              variant="outline"
-              className="border-blue-500/30 text-white hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10 rounded-full backdrop-blur-xl px-8 py-4 text-lg"
+            <a 
+              href="/whitepaper.html" 
+              target="_blank" 
+              rel="noopener noreferrer"
             >
-              <ExternalLink className="w-5 h-5 mr-3" />
-              View Technical Specs
-            </Button>
+              <Button className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-medium px-8 py-4 rounded-full transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-purple-500/25 text-lg">
+                <Download className="w-5 h-5 mr-3" />
+                View Full Whitepaper
+              </Button>
+            </a>
+            
+            <a 
+              href="/whitepaper.html" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <Button
+                variant="outline"
+                className="border-blue-500/30 text-white hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10 rounded-full backdrop-blur-xl px-8 py-4 text-lg"
+              >
+                <ExternalLink className="w-5 h-5 mr-3" />
+                View Technical Specs
+              </Button>
+            </a>
           </div>
           
           <div className="mt-12 grid md:grid-cols-3 gap-8">
