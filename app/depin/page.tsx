@@ -20,11 +20,158 @@ import {
   Cloud,
   TrendingUp,
   CheckCircle,
-  Play
+  Play,
+  Smartphone,
+  Wifi,
+  Database,
+  Battery,
+  Clock,
+  Activity,
+  Layers
 } from "lucide-react"
 import Image from "next/image"
+import { useEffect, useState } from "react"
+
+// Define interfaces for the missing browser APIs
+interface NetworkInformation {
+  effectiveType?: string;
+  downlink?: number;
+}
+
+interface NavigatorExtended extends Navigator {
+  connection?: NetworkInformation;
+  mozConnection?: NetworkInformation;
+  webkitConnection?: NetworkInformation;
+  deviceMemory?: number;
+  getBattery?: () => Promise<{ level: number }>;
+}
 
 export default function DePINPage() {
+  const [deviceSpecs, setDeviceSpecs] = useState({
+    cpu: "Detecting...",
+    memory: "Detecting...",
+    connection: "Detecting...",
+    battery: "Detecting...",
+    earning: 0,
+    miningScore: 0,
+    networks: {
+      helium: { active: false, performance: 0 },
+      filecoin: { active: false, performance: 0 },
+      render: { active: false, performance: 0 }
+    }
+  })
+
+  const [isAnimating, setIsAnimating] = useState(false)
+  
+  // Device detection effect
+  useEffect(() => {
+    // Simulate detection delay
+    const detectDevice = setTimeout(() => {
+      // Get browser information to estimate device capabilities
+      const nav = navigator as NavigatorExtended;
+      const connection = nav.connection || 
+                         nav.mozConnection || 
+                         nav.webkitConnection || 
+                         { effectiveType: '4g', downlink: 10 };
+      
+      const connectionType = connection.effectiveType || '4g';
+      const connectionSpeed = connection.downlink || 10;
+      
+      // Detect CPU cores
+      const cpuCores = navigator.hardwareConcurrency || 4;
+      
+      // Get device memory if available (in GB)
+      const deviceMemory = nav.deviceMemory || 4;
+      
+      // Check for battery API
+      let batteryLevel = "Unknown";
+      if (nav.getBattery) {
+        nav.getBattery().then((battery) => {
+          batteryLevel = `${Math.floor(battery.level * 100)}%`;
+          setDeviceSpecs(prev => ({
+            ...prev,
+            battery: batteryLevel
+          }));
+        });
+      }
+      
+      // Calculate mining score based on detected specs (0-100)
+      const miningScore = Math.min(
+        100, 
+        Math.floor((cpuCores * 5) + (deviceMemory * 10) + 
+        (connectionType === '4g' ? 20 : connectionType === '3g' ? 10 : 5) +
+        (connectionSpeed * 2))
+      );
+      
+      // Calculate potential earning based on score
+      const potentialEarning = (miningScore * 0.25).toFixed(2);
+      
+      // Network performance calculation based on device specs
+      const heliumPerf = Math.min(100, Math.floor(connectionSpeed * 7 + Math.random() * 15));
+      const filecoinPerf = Math.min(100, Math.floor(deviceMemory * 15 + Math.random() * 10));
+      const renderPerf = Math.min(100, Math.floor(cpuCores * 10 + Math.random() * 20));
+      
+      setDeviceSpecs({
+        cpu: `${cpuCores} Cores`,
+        memory: `${deviceMemory} GB`,
+        connection: `${connectionType.toUpperCase()} (${connectionSpeed} Mbps)`,
+        battery: batteryLevel,
+        earning: parseFloat(potentialEarning),
+        miningScore: miningScore,
+        networks: {
+          helium: { 
+            active: connectionSpeed > 5, 
+            performance: heliumPerf 
+          },
+          filecoin: { 
+            active: deviceMemory >= 4, 
+            performance: filecoinPerf 
+          },
+          render: { 
+            active: cpuCores >= 4, 
+            performance: renderPerf 
+          }
+        }
+      });
+    }, 1500);
+    
+    return () => clearTimeout(detectDevice);
+  }, []);
+  
+  // Animation effect for mining simulation
+  useEffect(() => {
+    let interval: NodeJS.Timeout | undefined;
+    if (isAnimating && deviceSpecs.miningScore > 0) {
+      interval = setInterval(() => {
+        setDeviceSpecs(prev => {
+          const randomIncrease = Math.random() * 0.01 * (prev.miningScore / 20);
+          return {
+            ...prev,
+            earning: parseFloat((prev.earning + randomIncrease).toFixed(2)),
+            networks: {
+              helium: { 
+                ...prev.networks.helium,
+                performance: Math.min(100, prev.networks.helium.performance + (Math.random() * 2 - 1))
+              },
+              filecoin: { 
+                ...prev.networks.filecoin,
+                performance: Math.min(100, prev.networks.filecoin.performance + (Math.random() * 2 - 1))
+              },
+              render: { 
+                ...prev.networks.render,
+                performance: Math.min(100, prev.networks.render.performance + (Math.random() * 2 - 1))
+              }
+            }
+          };
+        });
+      }, 2000);
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isAnimating, deviceSpecs.miningScore]);
+
   const networks = [
     {
       name: "Helium",
@@ -169,13 +316,55 @@ export default function DePINPage() {
               </div>
             </div>
             <div className="relative">
-              <div className="relative w-full h-96">
-                <Image
-                  src="/images/depin-network-topology.png"
-                  alt="DePIN Network Topology"
-                  fill
-                  className="object-contain"
-                />
+              <div className="relative w-full h-96 flex items-center justify-center">
+                <div className="w-full max-w-md h-full rounded-2xl overflow-hidden border border-blue-500/20 shadow-xl shadow-blue-500/10">
+                  <div className="h-full w-full bg-gradient-to-r from-slate-900 to-slate-800 p-8">
+                    <div className="mb-8 text-center">
+                      <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                        <Network className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-white mb-2">Network Simulation</h3>
+                    </div>
+                    <div className="space-y-6">
+                      {["Helium", "Filecoin", "Render Network"].map((name, idx) => (
+                        <div key={idx} className="bg-slate-800/50 rounded-lg p-4 flex items-center justify-between">
+                          <div className="flex items-center">
+                            <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mr-3">
+                              {idx === 0 && <Radio className="w-5 h-5 text-blue-400" />}
+                              {idx === 1 && <HardDrive className="w-5 h-5 text-cyan-400" />}
+                              {idx === 2 && <Cpu className="w-5 h-5 text-purple-400" />}
+                            </div>
+                            <span className="text-white">{name}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse mr-2"></div>
+                            <span className="text-green-400 text-xs">Active</span>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="pt-4 border-t border-gray-700/50">
+                        <div className="flex justify-between text-sm mb-2">
+                          <span className="text-gray-400">Network Status</span>
+                          <span className="text-green-400">Online</span>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center text-sm">
+                            <span className="text-gray-400">Signal Strength</span>
+                            <div className="flex space-x-1">
+                              {[1, 2, 3, 4].map((bar) => (
+                                <div 
+                                  key={bar} 
+                                  className={`w-1 rounded-full ${bar <= 3 ? 'bg-green-500' : 'bg-gray-700'}`}
+                                  style={{ height: `${bar * 4}px` }}
+                                ></div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -296,7 +485,7 @@ export default function DePINPage() {
         </div>
       </section>
 
-      {/* Mining Dashboard Preview */}
+      {/* Mining Dashboard Preview - UPDATED SECTION */}
       <section className="py-20 px-4 sm:px-6 bg-slate-900/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -307,8 +496,73 @@ export default function DePINPage() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card className="bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-900/50 backdrop-blur-2xl border border-blue-500/20">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Device Specs Card */}
+            <Card className="bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-900/50 backdrop-blur-2xl border border-blue-500/20 overflow-hidden">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Smartphone className="w-5 h-5 mr-2 text-blue-400" />
+                  Your Device
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center">
+                      <Cpu className="w-4 h-4 mr-2 text-gray-400" />
+                      <span className="text-gray-400">Processor</span>
+                    </div>
+                    <span className="text-white">{deviceSpecs.cpu}</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center">
+                      <Database className="w-4 h-4 mr-2 text-gray-400" />
+                      <span className="text-gray-400">Memory</span>
+                    </div>
+                    <span className="text-white">{deviceSpecs.memory}</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center">
+                      <Wifi className="w-4 h-4 mr-2 text-gray-400" />
+                      <span className="text-gray-400">Connection</span>
+                    </div>
+                    <span className="text-white">{deviceSpecs.connection}</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center">
+                      <Battery className="w-4 h-4 mr-2 text-gray-400" />
+                      <span className="text-gray-400">Battery</span>
+                    </div>
+                    <span className="text-white">{deviceSpecs.battery}</span>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Mining Score</span>
+                      <span className={`font-semibold ${
+                        deviceSpecs.miningScore > 80 ? 'text-green-400' : 
+                        deviceSpecs.miningScore > 50 ? 'text-yellow-400' : 'text-orange-400'
+                      }`}>
+                        {deviceSpecs.miningScore}/100
+                      </span>
+                    </div>
+                    <Progress 
+                      value={deviceSpecs.miningScore} 
+                      className="h-2"
+                      style={{
+                        background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 50%, rgba(236, 72, 153, 0.2) 100%)'
+                      }}
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Live Earnings Card */}
+            <Card className="bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-900/50 backdrop-blur-2xl border border-blue-500/20 overflow-hidden">
               <CardHeader>
                 <CardTitle className="text-white flex items-center">
                   <TrendingUp className="w-5 h-5 mr-2 text-green-400" />
@@ -319,26 +573,58 @@ export default function DePINPage() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400">Today's Earnings</span>
-                    <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                      $24.67
+                    <div className="flex items-center">
+                      <span className={`text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent transition-all duration-500 ${isAnimating ? 'scale-110' : ''}`}>
+                        ${deviceSpecs.earning.toFixed(2)}
+                      </span>
+                      {isAnimating && (
+                        <Activity className="w-5 h-5 ml-2 text-green-500 animate-pulse" />
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-400">Estimated Monthly</span>
+                    <span className="text-xl font-semibold text-white">
+                      ${(deviceSpecs.earning * 30).toFixed(2)}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400">This Month</span>
-                    <span className="text-xl font-semibold text-white">$742.15</span>
-                  </div>
+                  
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-400">NEX Tokens</span>
-                      <span className="text-white">156.4 NEX</span>
+                      <span className="text-white">
+                        {(deviceSpecs.earning * 10).toFixed(1)} NEX
+                      </span>
                     </div>
-                    <Progress value={75} className="h-2" />
+                    <Progress 
+                      value={75} 
+                      className="h-2"
+                      style={{
+                        background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 50%, rgba(236, 72, 153, 0.2) 100%)'
+                      }}
+                    />
+                  </div>
+                  
+                  <div className="flex justify-between items-center text-sm">
+                    <div className="flex items-center">
+                      <Clock className="w-4 h-4 mr-2 text-gray-400" />
+                      <span className="text-gray-400">Uptime</span>
+                    </div>
+                    <span className="text-white">
+                      {isAnimating ? (
+                        <span className="flex items-center text-green-400">
+                          Active <span className="ml-1 h-2 w-2 rounded-full bg-green-500 animate-ping"></span>
+                        </span>
+                      ) : 'Inactive'}
+                    </span>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-900/50 backdrop-blur-2xl border border-blue-500/20">
+            {/* Network Performance Card */}
+            <Card className="bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-900/50 backdrop-blur-2xl border border-blue-500/20 overflow-hidden">
               <CardHeader>
                 <CardTitle className="text-white flex items-center">
                   <Network className="w-5 h-5 mr-2 text-blue-400" />
@@ -347,32 +633,88 @@ export default function DePINPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {['Helium', 'Filecoin', 'Render'].map((network, index) => (
-                    <div key={network} className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">{network}</span>
-                        <span className="text-green-400">Active</span>
-                      </div>
-                      <Progress value={[85, 92, 78][index]} className="h-2" />
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Helium</span>
+                      <span className={deviceSpecs.networks.helium.active ? "text-green-400" : "text-gray-400"}>
+                        {deviceSpecs.networks.helium.active ? "Active" : "Not Available"}
+                      </span>
                     </div>
-                  ))}
+                    <Progress 
+                      value={deviceSpecs.networks.helium.performance} 
+                      className={`h-2 ${!deviceSpecs.networks.helium.active && 'opacity-50'}`}
+                      style={{
+                        background: deviceSpecs.networks.helium.active ? 
+                          'linear-gradient(90deg, rgba(52, 211, 153, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%)' : 
+                          'rgba(100, 116, 139, 0.2)'
+                      }}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Filecoin</span>
+                      <span className={deviceSpecs.networks.filecoin.active ? "text-green-400" : "text-gray-400"}>
+                        {deviceSpecs.networks.filecoin.active ? "Active" : "Not Available"}
+                      </span>
+                    </div>
+                    <Progress 
+                      value={deviceSpecs.networks.filecoin.performance} 
+                      className={`h-2 ${!deviceSpecs.networks.filecoin.active && 'opacity-50'}`}
+                      style={{
+                        background: deviceSpecs.networks.filecoin.active ? 
+                          'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%)' : 
+                          'rgba(100, 116, 139, 0.2)'
+                      }}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Render Network</span>
+                      <span className={deviceSpecs.networks.render.active ? "text-green-400" : "text-gray-400"}>
+                        {deviceSpecs.networks.render.active ? "Active" : "Not Available"}
+                      </span>
+                    </div>
+                    <Progress 
+                      value={deviceSpecs.networks.render.performance} 
+                      className={`h-2 ${!deviceSpecs.networks.render.active && 'opacity-50'}`}
+                      style={{
+                        background: deviceSpecs.networks.render.active ? 
+                          'linear-gradient(90deg, rgba(168, 85, 247, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%)' : 
+                          'rgba(100, 116, 139, 0.2)'
+                      }}
+                    />
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
           
           <div className="text-center mt-12">
-            <div className="relative w-full max-w-4xl mx-auto h-64 mb-8">
-              <Image
-                src="/images/earnings-dashboard.png"
-                alt="Mining Dashboard"
-                fill
-                className="object-contain rounded-xl"
-              />
-            </div>
-            <Button className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-medium px-8 py-4 rounded-full transition-all duration-300 shadow-lg text-lg">
-              Try Demo Dashboard
+            <Button 
+              className={`${
+                isAnimating 
+                  ? "bg-red-600 hover:bg-red-700" 
+                  : "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700"
+              } text-white font-medium px-8 py-4 rounded-full transition-all duration-300 shadow-lg text-lg`}
+              onClick={() => setIsAnimating(prev => !prev)}
+            >
+              {isAnimating ? (
+                <>
+                  <Layers className="w-5 h-5 mr-2 animate-pulse" />
+                  Stop Demo Mining
+                </>
+              ) : (
+                <>
+                  <Play className="w-5 h-5 mr-2" />
+                  Start Demo Mining
+                </>
+              )}
             </Button>
+            <p className="mt-4 text-sm text-gray-400">
+              This is a simulated demo based on your device's detected capabilities
+            </p>
           </div>
         </div>
       </section>
